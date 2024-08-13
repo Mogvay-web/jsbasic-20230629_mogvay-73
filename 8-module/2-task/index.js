@@ -5,25 +5,27 @@ export default class ProductGrid {
   constructor(products) {
     this.products = products;
     this.filters = {};
-    this.elem = this.render(products);
+    this.render();
   }
 
-  template(products) {
-    let cards = products.map(function (product) {
-      let card = new ProductCard(product);
-      return card.elem.outerHTML;
-    });
+  render() {
+    this.elem = createElement(`
+      <div class="products-grid">
+        <div class="products-grid__inner">
+        </div>
+      </div>
+    `);
 
-    return `<div class="products-grid">
-              <div class="products-grid__inner">
-                ${cards.join("")}
-              </div>
-            </div>`;
+    this.renderCards(this.products);
   }
 
-  render(products) {
-    let render = createElement(this.template(products));
-    return render;
+  renderCards(products) {
+    const productsGridInner = this.elem.querySelector(".products-grid__inner");
+    productsGridInner.innerHTML = "";
+
+    for (let product of products) {
+      productsGridInner.append(new ProductCard(product).elem);
+    }
   }
 
   updateFilter(filter) {
@@ -46,7 +48,6 @@ export default class ProductGrid {
       return true;
     });
 
-    this.elem.innerHTML = "";
-    this.elem.appendChild(this.render(result).firstElementChild);
+    this.renderCards(result);
   }
 }

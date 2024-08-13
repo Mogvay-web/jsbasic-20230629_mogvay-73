@@ -30,7 +30,12 @@ export default class StepSlider {
   render() {
     let render = (this.elem = createElement(this.template())),
       config = this.steps - 1,
-      thumb = render.querySelector(".slider__thumb");
+      thumb = render.querySelector(".slider__thumb"),
+      progress = render.querySelector(".slider__progress"),
+      percents = (this.value / config) * 100;
+
+    thumb.style.left = `${percents}%`;
+    progress.style.width = `${percents}%`;
 
     thumb.ondragstart = () => false;
 
@@ -68,9 +73,9 @@ export default class StepSlider {
       activeOld.classList.remove("slider__step-active");
       activeNew.classList.add("slider__step-active");
 
-      let progress = this.querySelector(".slider__progress"),
-        percents = (measure / config) * 100;
+      let progress = this.querySelector(".slider__progress");
 
+      percents = (measure / config) * 100;
       thumb.style.left = `${percents}%`;
       progress.style.width = `${percents}%`;
     }
